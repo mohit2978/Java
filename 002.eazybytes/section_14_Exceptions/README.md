@@ -1,7 +1,13 @@
 # Exception handling using try, catch and finally
 In Java, an exception is an event that disrupts the normal flow of a program's instructions during execution. When an exceptional condition occurs, the Java runtime creates an exception object, which contains information about the error, such as its type and the state of the program when the error occurred. This exception object is then "thrown" from the point in the code where the error occurred, and the runtime searches for an exception handler that can handle it.
 
-There are two main types of exceptions in Java: checked exceptions and unchecked exceptions. Checked exceptions are exceptions that must be either caught or declared to be thrown by the method in which they may occur. Unchecked exceptions, on the other hand, are exceptions that do not need to be explicitly caught or declared, and they typically indicate programming errors or other exceptional conditions that are beyond the control of the program.
+There are two main types of exceptions in Java: 
+1. checked exceptions
+2.  unchecked exceptions
+
+ Checked exceptions are exceptions that must be either caught or declared to be thrown by the method in which they may occur.
+ 
+  Unchecked exceptions, on the other hand, are exceptions that do not need to be explicitly caught or declared, and they typically indicate programming errors or other exceptional conditions that are beyond the control of the program.
 
 Java provides a robust exception handling mechanism through the use of try-catch blocks, where code that may throw exceptions is enclosed in a try block, and any exceptions that are thrown are caught and handled by catch blocks. Additionally, Java allows for the use of finally blocks to execute cleanup code regardless of whether an exception is thrown or not. This combination of try, catch, and finally blocks provides a powerful mechanism for managing exceptional conditions in Java programs.
 
@@ -14,6 +20,19 @@ Throwable:
 - **Unchecked Exceptions (RuntimeExceptions) :** These are exceptions that don't need to be caught or declared. They typically represent programming errors or other conditions that are beyond the control of the program. They are subclasses of RuntimeException.
 ### Checked Exceptions:
 
+ Checked Exceptions (Compile-Time Exceptions)
+- 📌 Definition: Checked exceptions are exceptions that the compiler forces you to handle using try-catch or throws.
+- 📌 Purpose: They indicate recoverable problems (e.g., file not found, database connection failure).
+
+✅ Examples:
+
+    IOException
+    SQLException
+    FileNotFoundException
+    ClassNotFoundException
+✅ Handling Required:
+If you don’t handle a checked exception, your code won't compile.
+
 - **IOException :** Represents an error occurred during I/O operations.
 - **FileNotFoundException :** Indicates that a file could not be found.
 - **EOFException :** Indicates that the end of a file or stream has been reached unexpectedly.
@@ -22,6 +41,19 @@ Throwable:
 And many more...
 ### Unchecked Exceptions (RuntimeExceptions):
 
+- 📌 Definition: Unchecked exceptions are exceptions that occur at runtime and are not checked by the compiler.
+- 📌 Purpose: They indicate programming logic errors (e.g., accessing a null object).
+
+✅ Examples:
+
+    NullPointerException
+    ArrayIndexOutOfBoundsException
+    ArithmeticException
+    IllegalArgumentException
+✅ Handling Optional:
+
+You don’t need to catch or declare unchecked exceptions.
+
 - **ArithmeticException :** Indicates that an arithmetic operation has failed.
 - **NullPointerException :** Indicates an attempt to access or invoke a method on a null object.
 - **ArrayIndexOutOfBoundsException :** Indicates that an array has been accessed with an illegal index.
@@ -29,6 +61,38 @@ And many more...
 - **IllegalStateException :** Indicates that the application is in an inappropriate state for the requested operation.
 - **ClassCastException :** Indicates an invalid cast operation.
 And many more...
+
+The key differences between Error and Exception in Java (or similar languages) are:
+
+1. Definition:
+    - Error: A serious problem that occurs at runtime and is typically beyond the control of the application (e.g., OutOfMemoryError, StackOverflowError).
+    - Exception: An event that disrupts the normal flow of the program but can be handled (e.g., NullPointerException, IOException).
+2. Recoverability:
+    - Error: Not recoverable; the program usually crashes.
+    - Exception: Can be handled using try-catch blocks.
+3. Types:
+    - Error: Belongs to the java.lang.Error class.
+    - Exception: Belongs to the java.lang.Exception class.
+4. Examples:
+   -  Errors:
+        - OutOfMemoryError
+        - StackOverflowError
+        - VirtualMachineError
+   -  Exceptions:
+        - NullPointerException
+        - IOException
+        - ArithmeticException
+5. Handling:
+    - Error: Generally not caught using try-catch.
+    - Exception: Should be handled using try-catch or throws.
+6. Subtypes of Exception:
+    - Checked Exception: Must be handled (e.g., IOException).
+    - Unchecked Exception: Occurs at runtime (e.g., NullPointerException).
+
+
+
+
+
 ### Example with try, catch block
 ```java
 package com.eazybytes.exception;
@@ -76,6 +140,9 @@ public class ArrayIndexOutofBoundsExceptionDemo {
 }
 ```
 ### With Multipple catch blocks
+We need multiple catch block as we need different handling ways on different type of exception!! We keep all declaration outside try block ,we need not put safe code inside try block!!
+
+
 ```java
 package com.eazybytes.exception;
 
@@ -106,6 +173,9 @@ public class MultipleCatchDemo {
     }
 }
 ```
+
+to catch multiple exception by single catch block use pipe symbol ,see how we handled 2nd one!!
+
 ### finally block
 In Java, the `finally` block is used to define a block of code that will be executed after a `try` block has completed execution, whether an exception is thrown or not. This block ensures that certain cleanup or finalization tasks are performed, such as closing resources like files or database connections.
 ### Syntax
@@ -121,6 +191,7 @@ try {
 - The `try` block contains the code that may throw an exception.
 - The `catch` block is optional and is used to handle exceptions.
 - The `finally` block contains the code that will be executed regardless of whether an exception occurs or not.
+
 #### Example
 ```java
 package com.eazybytes.exception;
@@ -152,11 +223,14 @@ public class ExceptionDemo {
 
 }
 ```
+
 ### Key Points
 - The `finally` block is always executed, even if an exception is thrown.
 - If an exception is thrown and caught, the `finally` block is executed after the `catch` block.
 - If no exception is thrown, the `finally` block is still executed after the `try` block.
 - The `finally` block is often used to perform cleanup tasks, such as closing resources opened in the `try` block.
+
+
 ### Best Practices
 - **Resource Management :** Use the `finally` block to ensure that resources like files, database connections, or network connections are properly closed, regardless of whether an exception occurs.
 - **Error Cleanup :** Perform any necessary cleanup operations in the `finally` block to leave the program or system in a consistent state, even in the event of an error.
@@ -232,6 +306,11 @@ public class TryWithResourcesDemo {
 - Automatic Resource Management: Resources are automatically closed at the end of the try block, reducing the risk of resource leaks.
 - Concise and Readable: Try-with-resources reduces boilerplate code, making your code cleaner and easier to understand.
 - Exception Handling: Exceptions that occur during resource management are properly handled without the need for explicit finally blocks.
+
+>Note: the resources assigned in try resource assignment cannot be reassigned inside the try block again!!
+
+>Note: you cannot define order like first try then finally and then catch!!
+
 ### Conclusion
 Try-with-resources is a powerful feature in Java for managing resources efficiently and safely. By using this feature, you can simplify your code and improve its robustness by ensuring that resources are properly closed after use.
 ## throws Keyword
@@ -391,8 +470,11 @@ public class NestedTryExample {
 In this example, we have an outer try block that contains an array access statement, which may throw an `ArrayIndexOutOfBoundsException`. Inside the outer try block, we have a nested try block that contains a division operation, which may throw an `ArithmeticException`. By using nested try blocks, we can handle these exceptions separately and provide specific error messages or take appropriate actions based on the type of exception thrown.
 ### Conclusion
 Nested try blocks are a powerful feature of Java's exception handling mechanism that allows developers to handle exceptions at different levels of code execution. When used judiciously, nested try blocks can make your code more robust and maintainable by providing fine-grained control over exception handling.
+
 ## Custom Checked Exceptions
 In Java, exceptions play a crucial role in handling errors and abnormal conditions that may occur during program execution. While Java provides a wide range of built-in exceptions, sometimes it's necessary to create custom exceptions to handle specific scenarios unique to your application.
+
+
 Custom exceptions allow you to define your own exception types tailored to the requirements of your application domain. Checked exceptions, in particular, are those that are checked at compile-time, ensuring that they are either caught or declared to be thrown by the method in which they may occur.
 #### Example
 ```java
@@ -415,7 +497,11 @@ public class AcceptAgeDetails {
     }
 
 }
+```
+need to throw Exception class Exception!! so we use throws!!
 
+Custom Exception defined
+```java
 package com.eazybytes.exception.custom;
 
 public class InvalidAgeException extends Exception {
@@ -429,6 +515,45 @@ public class InvalidAgeException extends Exception {
     }
 
 }
+```
+
+When we extend Exeption class it is checked exception
+## Custom Unchecked Exception
+
+Exception class extend Runtime Exception so that why it is Unchecked Exception!!
+
+
+```java
+public class DivideByZeroException extends RuntimeException {
+
+    public DivideByZeroException() {
+        super();
+    }
+
+    public DivideByZeroException(String message) {
+        super(message);
+    }
+
+}
+
+```
+
+main class
+
+```java
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter a numerator number value to perform the division:");
+        int numerator = scanner.nextInt();
+        System.out.println("Please enter a denominator number value to perform the division:");
+        int denominator = scanner.nextInt();
+        if(denominator==0){
+            throw new DivideByZeroException("Denominator can't be zero");
+        }
+        int result = numerator/denominator;
+        System.out.println(result);
+    }
+
 ```
 ## Understanding final, finally, and finalize
 ### final
