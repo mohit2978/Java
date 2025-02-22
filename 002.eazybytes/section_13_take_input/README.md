@@ -312,7 +312,7 @@ log.info("User {} logged in at {}", username, LocalDateTime.now());`
 - Difficult to Disable or Redirect
 
     If you use System.out.println(), you can't easily turn off or redirect logs without modifying the code.
-    
+
     With a logging framework, you can change settings in a config file (e.g., logback.xml, log4j.properties) without touching the code.
 
 Logging is an essential aspect of software development, providing insight into the behavior of applications during runtime. In Java, the `java.util.logging` package offers a straightforward logging solution that comes bundled with the JDK.
@@ -341,6 +341,38 @@ public class LoggingDemo {
 
 }
 ```
+
+The output of your code will be:
+```text
+SEVERE: This is severe level logging
+Hello using System.out.println
+```
+####  Explanation:
+logger.setLevel(Level.SEVERE);
+
+This sets the logger to only log messages of SEVERE level or higher.
+
+Any logs below this level (INFO, WARNING) will not be displayed.
+
+`
+logger.info("This is info level logging");`
+
+INFO level is lower than SEVERE, so it is not printed.
+
+`
+logger.log(Level.WARNING, "This is warning level logging");`
+
+WARNING level is lower than SEVERE, so it is not printed.
+logger.severe("This is severe level logging");
+
+SEVERE is equal to the set level, so it gets printed.
+
+`System.out.println("Hello using System.out.println");`
+
+This is a direct println statement, so it always prints to the console.
+
+
+
 ### Usage
 - The `Logger` class is used to log messages in your Java code.
 - Log messages can be categorized into different levels such as INFO, WARNING, and SEVERE.
