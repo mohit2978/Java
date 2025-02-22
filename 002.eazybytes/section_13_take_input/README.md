@@ -371,6 +371,7 @@ SEVERE is equal to the set level, so it gets printed.
 
 This is a direct println statement, so it always prints to the console.
 
+This is how we disable some level of logging!!
 
 
 ### Usage
