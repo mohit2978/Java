@@ -140,11 +140,13 @@ BufferedReader is implemetation of abstaract class Reader class!!It also read th
 
 BufferReader has 2 constructor
 
+No default constructor here
+
 1. take Reader as input only --> it makes buffer of default size of 8KB , it read 8KB data at once and put in memory and process one by one from memory!!
 
 2. Take Reader as input as well as size --> makes buffer of given size
 
-#### Example
+### Example
 ```java
 package com.eazybytes.input;
 
@@ -158,6 +160,7 @@ public class BufferedReaderDemo {
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader bf = new BufferedReader(isr);
         System.out.println("Please enter a value...");
+        //do not use read() use readLine() as read () works same as System.in.read() it gives ASCII of first char
         String input = bf.readLine();
         System.out.println("The user entered a value: "+ input);
         bf.close();
@@ -174,7 +177,13 @@ Please enter a value...
 The user entered a value: 345
 ```
 
-#### Example for identify even and odd numbers
+For reading data from keyboard we use InputStreamReader
+
+For reading data from file we use FileReader
+
+>Note:do not use read() use readLine() as read () works same as System.in.read() it gives ASCII of first char
+`String input = bf.readLine();`
+### Example for identify even and odd numbers
 ```java
 package com.eazybytes.input;
 
