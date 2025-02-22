@@ -8,7 +8,8 @@ import java.io.IOException;
 public class FileReaderWithBFR {
 
     public static void main(String[] args) throws  IOException {
-        FileReader fileReader = new FileReader("/Users/eazybytes/Desktop/story.txt");
+        FileReader fileReader = new FileReader
+                ("/Users/eazybytes/Desktop/story.txt");
         BufferedReader reader = new BufferedReader(fileReader);
         String line;
 

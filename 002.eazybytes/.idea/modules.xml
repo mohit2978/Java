@@ -14,7 +14,7 @@
       <module fileurl="file://$PROJECT_DIR$/section_11/section_11.iml" filepath="$PROJECT_DIR$/section_11/section_11.iml" />
       <module fileurl="file://$PROJECT_DIR$/section_12/section_12.iml" filepath="$PROJECT_DIR$/section_12/section_12.iml" />
       <module fileurl="file://$PROJECT_DIR$/section_13_take_input/section_13_take_input.iml" filepath="$PROJECT_DIR$/section_13_take_input/section_13_take_input.iml" />
-      <module fileurl="file://$PROJECT_DIR$/section_14/section_14.iml" filepath="$PROJECT_DIR$/section_14/section_14.iml" />
+      <module fileurl="file://$PROJECT_DIR$/section_14_Exceptions/section_14_Exceptions.iml" filepath="$PROJECT_DIR$/section_14_Exceptions/section_14_Exceptions.iml" />
       <module fileurl="file://$PROJECT_DIR$/section_15/section_15.iml" filepath="$PROJECT_DIR$/section_15/section_15.iml" />
       <module fileurl="file://$PROJECT_DIR$/section_16/section_16.iml" filepath="$PROJECT_DIR$/section_16/section_16.iml" />
       <module fileurl="file://$PROJECT_DIR$/section_17/section_17.iml" filepath="$PROJECT_DIR$/section_17/section_17.iml" />
@@ -24,11 +24,11 @@
       <module fileurl="file://$PROJECT_DIR$/section_21/section_21.iml" filepath="$PROJECT_DIR$/section_21/section_21.iml" />
       <module fileurl="file://$PROJECT_DIR$/section_22/section_22.iml" filepath="$PROJECT_DIR$/section_22/section_22.iml" />
       <module fileurl="file://$PROJECT_DIR$/section_23/section_23.iml" filepath="$PROJECT_DIR$/section_23/section_23.iml" />
-      <module fileurl="file://$PROJECT_DIR$/section_24/section_24.iml" filepath="$PROJECT_DIR$/section_24/section_24.iml" />
-      <module fileurl="file://$PROJECT_DIR$/section_25/section_25.iml" filepath="$PROJECT_DIR$/section_25/section_25.iml" />
-      <module fileurl="file://$PROJECT_DIR$/section_26/section_26.iml" filepath="$PROJECT_DIR$/section_26/section_26.iml" />
-      <module fileurl="file://$PROJECT_DIR$/section_27/section_27.iml" filepath="$PROJECT_DIR$/section_27/section_27.iml" />
-      <module fileurl="file://$PROJECT_DIR$/section_28/section_28.iml" filepath="$PROJECT_DIR$/section_28/section_28.iml" />
+      <module fileurl="file://$PROJECT_DIR$/section_24_functional_programming/section_24_functional_programming.iml" filepath="$PROJECT_DIR$/section_24_functional_programming/section_24_functional_programming.iml" />
+      <module fileurl="file://$PROJECT_DIR$/section_25_Lambda/section_25_Lambda.iml" filepath="$PROJECT_DIR$/section_25_Lambda/section_25_Lambda.iml" />
+      <module fileurl="file://$PROJECT_DIR$/section_26_Streams/section_26_Streams.iml" filepath="$PROJECT_DIR$/section_26_Streams/section_26_Streams.iml" />
+      <module fileurl="file://$PROJECT_DIR$/section_27_optional/section_27_optional.iml" filepath="$PROJECT_DIR$/section_27_optional/section_27_optional.iml" />
+      <module fileurl="file://$PROJECT_DIR$/section_28_Multithreading/section_28_Multithreading.iml" filepath="$PROJECT_DIR$/section_28_Multithreading/section_28_Multithreading.iml" />
       <module fileurl="file://$PROJECT_DIR$/section_29/section_29.iml" filepath="$PROJECT_DIR$/section_29/section_29.iml" />
     </modules>
   </component>

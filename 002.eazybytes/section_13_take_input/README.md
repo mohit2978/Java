@@ -183,6 +183,12 @@ For reading data from file we use FileReader
 
 >Note:do not use read() use readLine() as read () works same as System.in.read() it gives ASCII of first char
 `String input = bf.readLine();`
+
+>Note: BufferedReader always give ouput in String format!!
+
+>Note: we always need to close BufferedReader and Scanner object!!If you do not close it may create memory leak in production!!
+
+
 ### Example for identify even and odd numbers
 ```java
 package com.eazybytes.input;
@@ -199,6 +205,7 @@ public class BufferedReaderDemo {
         System.out.println("Please enter a value...");
         String input = bf.readLine();
        // System.out.println("The user entered a value: "+ input);
+       // till now input os string so need to convert to int
        int number = Integer.parseInt(input);
        if(number % 2 == 0){
            System.out.println("You have entered even number");
@@ -210,8 +217,29 @@ public class BufferedReaderDemo {
 
 }
 ```
+### File Reader from BFR
+
+```java
+
+public class FileReaderWithBFR {
+
+    public static void main(String[] args) throws  IOException {
+        FileReader fileReader = new FileReader
+                ("/Users/eazybytes/Desktop/story.txt");
+        BufferedReader reader = new BufferedReader(fileReader);
+        String line;
+
+        while ((line = reader.readLine()) != null){
+            System.out.println(line);
+        }
+        reader.close();
+    }
+
+}
+
+```
 ## Scanner 
-## The `Scanner` class in Java is used to parse primitive types and strings from the standard input.
+>Note:The `Scanner` class in Java is used to parse primitive types and strings from the standard input.
 #### Example
 ```java
 package com.eazybytes.input;
