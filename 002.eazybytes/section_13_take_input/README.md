@@ -228,7 +228,7 @@ public class FileReaderWithBFR {
                 ("/Users/eazybytes/Desktop/story.txt");
         BufferedReader reader = new BufferedReader(fileReader);
         String line;
-
+        //read line by line and stop at null line i.e. EOF
         while ((line = reader.readLine()) != null){
             System.out.println(line);
         }
@@ -238,8 +238,27 @@ public class FileReaderWithBFR {
 }
 
 ```
+see bufferreaderExercise too!!
+
 ## Scanner 
 >Note:The `Scanner` class in Java is used to parse primitive types and strings from the standard input.
+
+In scanner we no need to tell which StremReader to use!!for bufferedReader it was 2 step process but here it is one step process!!
+
+By default it's buffer size is 1KB and we cannot change it!!
+
+```java
+public final class Scanner implements Iterator<String>, Closeable {
+
+    // Internal buffer used to hold input
+    private CharBuffer buf;
+
+    // Size of internal character buffer
+    private static final int BUFFER_SIZE = 1024;
+
+```
+see 1024 Bytes !!
+
 #### Example
 ```java
 package com.eazybytes.input;
@@ -260,7 +279,42 @@ public class ScannerDemo {
 
 }
 ```
+if you have a string as input we use `nextLine()` do not  use `next()` for string as next() only reads first word and after space it will give error!!
+
+
+here we need not handle IOException unlike BufferedReader as Scanner itself handles that!!
+
 ## Java Logging
+
+Problems with System.out.println() in Production:
+- No Log Levels
+
+    System.out.println() prints everything to standard output without differentiating between INFO, DEBUG, WARN, ERROR, etc.
+
+    Logs should have severity levels so you can filter them based on importance.
+- No Flexibility
+
+    You can't easily control where the logs go (console, file, external logging systems like ELK, Splunk, or CloudWatch).
+
+    Logs should be configurable for different environments (development, testing, production).
+- Performance Issues
+
+    System.out.println() is synchronous and slow because it directly writes to the console.
+
+    In high-performance applications (like web servers handling thousands of requests per second), logging frameworks handle output more efficiently.
+- Lack of Formatting and Context
+
+    Logging frameworks allow structured logs with timestamps, thread names, and contextual information.
+
+    Example:
+`
+log.info("User {} logged in at {}", username, LocalDateTime.now());`
+- Difficult to Disable or Redirect
+
+    If you use System.out.println(), you can't easily turn off or redirect logs without modifying the code.
+    
+    With a logging framework, you can change settings in a config file (e.g., logback.xml, log4j.properties) without touching the code.
+
 Logging is an essential aspect of software development, providing insight into the behavior of applications during runtime. In Java, the `java.util.logging` package offers a straightforward logging solution that comes bundled with the JDK.
 ### Features
 - Logging configuration
