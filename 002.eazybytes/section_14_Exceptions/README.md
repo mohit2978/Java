@@ -12,8 +12,9 @@ There are two main types of exceptions in Java:
 Java provides a robust exception handling mechanism through the use of try-catch blocks, where code that may throw exceptions is enclosed in a try block, and any exceptions that are thrown are caught and handled by catch blocks. Additionally, Java allows for the use of finally blocks to execute cleanup code regardless of whether an exception is thrown or not. This combination of try, catch, and finally blocks provides a powerful mechanism for managing exceptional conditions in Java programs.
 
 ## Exception Hierarchy 
-Throwable:
+Throwable: super class for all exceptions
 
+Subclasses
 - **Error :** Represents serious problems that are typically beyond the control of the application, such as OutOfMemoryError or StackOverflowError. Usually, it is not appropriate for applications to catch or handle Error instances.
 - **Exception :** Represents exceptional conditions that a program should catch and handle. This is further divided into:
 - **Checked Exceptions (Compiletime Exceptions) :** These are exceptions that must be either caught or declared in the method's throws clause. They are subclasses of Exception but not of RuntimeException.
