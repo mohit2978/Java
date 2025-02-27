@@ -284,6 +284,98 @@ public class Main {
     }
 }
 ```
+
+## Advantage of multithreading
+
+simple java program without multithreading!!
+```java
+public class SumOfIntsDemo {
+
+    public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
+        long result = 0;
+        for(long i =0; i<=Integer.MAX_VALUE;i++) {
+            result = result + i;
+        }
+        System.out.println(result);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total time taken by normal Java class is : "+ (endTime-startTime));
+
+    }
+
+}
+```
+output:
+
+```text
+2305843008139952128
+Total time taken by normal Java class is : 839
+```
+With multiThreading
+
+Exetending Thread class
+```java
+package com.eazybytes.multithreading;
+
+public class SumThread extends Thread {
+
+    private int startIndex;
+    private int endIndex;
+    private long result;
+
+    public SumThread(int startIndex, int endIndex) {
+        this.startIndex = startIndex;
+        this.endIndex =endIndex;
+    }
+
+    @Override
+    public void run() {
+        for(long i =startIndex; i<=endIndex;i++) {
+            result = result + i;
+        }
+    }
+
+    public long getResult(){
+        return result;
+    }
+
+}
+
+```
+
+main class
+
+```java
+public class SumOfIntsThreadDemo {
+
+    public static void main(String[] args) throws InterruptedException {
+        long startTime = System.currentTimeMillis();
+        long result = 0;
+        SumThread thread1 = new SumThread(0, Integer.MAX_VALUE/2);
+        SumThread thread2 = new SumThread((Integer.MAX_VALUE/2)+1, Integer.MAX_VALUE);
+        thread1.start();
+        thread2.start();
+        thread1.join();//with join we are telling Main thread wait fo thread1 to complete
+        thread2.join();//with join we are telling Main thread wait fo thread2 to complete
+        result = thread1.getResult() + thread2.getResult();
+        System.out.println(result);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total time taken by multiple thread Java class is : "+ (endTime-startTime));
+    }
+
+}
+
+```
+
+output
+
+```text
+2305843008139952128
+Total time taken by multiple thread Java class is : 1998
+```
+
+dont know why here multithreading taking more time but generally it takes less time than that of normal java program!!
+
 ### Thread Lifecycle
 Understanding the lifecycle of a thread is essential for effective thread management. The main states of a thread are:
 
@@ -369,6 +461,31 @@ Thread thread = new Thread();
 String name = thread.getName();
 System.out.println("Thread Name: " + name);
 ```
+
+Example
+
+```java
+public class ThreadIDNameDemo {
+
+    public static void main(String[] args) {
+        Thread t1 = new Thread();
+        Thread t2 = new Thread();
+        Thread t3 = new Thread();
+        t3.setName("MyThread");
+
+        System.out.println("Thread 1 ID is : " + t1.getId() + ", name : "+ t1.getName());
+        System.out.println("Thread 2 ID is : " + t2.threadId() + ", name : "+ t2.getName());
+        System.out.println("Thread 3 ID is : " + t3.threadId() + ", name : "+ t3.getName());
+    }
+
+}
+```
+output
+```
+Thread 1 ID is : 22, name : Thread-0
+Thread 2 ID is : 23, name : Thread-1
+Thread 3 ID is : 24, name : MyThread
+````
 ### setName()
 - **Description :** Sets the name of this Thread.
 - **Syntax :** public final void setName(String name)
@@ -403,6 +520,42 @@ try {
 }
 ```
 
+Example
+
+```java
+public class SleepDemo {
+
+    public static void main(String[] args) throws InterruptedException {
+        long startTime = System.currentTimeMillis();
+        for(int i=0;i<5;i++){
+            System.out.println("Hello from Main method : " + i);
+            Thread.sleep(1000);
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total time taken : " + (endTime-startTime));
+    }
+
+}
+```
+```
+Hello from Main method : 0
+Hello from Main method : 1
+Hello from Main method : 2
+Hello from Main method : 3
+Hello from Main method : 4
+Total time taken : 5044
+```
+if we comment out thread.sleep()
+
+```
+Hello from Main method : 0
+Hello from Main method : 1
+Hello from Main method : 2
+Hello from Main method : 3
+Hello from Main method : 4
+Total time taken : 4
+```
+
 ### join()
 - **Description :** Waits for this thread to die.
 - **Syntax :** public final void join() throws InterruptedException
@@ -412,6 +565,58 @@ try {
 Thread thread = new Thread();
 thread.start();
 thread.join(); // Wait for the thread to finish execution
+```
+
+Example
+```java
+package com.eazybytes.multithreading;
+
+public class JoinExample {
+
+    public static void main(String[] args) {
+        Thread threadA = new Thread(
+                () -> {
+                    for(int i=1;i<=5;i++) {
+                        System.out.println("Thread A - count : "+i);
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+        );
+        threadA.start();
+        try {
+            threadA.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Main thread ended");
+    }
+
+}
+
+```
+
+```
+Thread A - count : 1
+Thread A - count : 2
+Thread A - count : 3
+Thread A - count : 4
+Thread A - count : 5
+Main thread ended
+```
+
+if we comment out join() and it's try catch block main will not stop for thread A and output be
+
+```
+Main thread ended
+Thread A - count : 1
+Thread A - count : 2
+Thread A - count : 3
+Thread A - count : 4
+Thread A - count : 5
 ```
 ### setPriority()
 - **Description :** Sets the priority of this thread.
@@ -433,6 +638,109 @@ Thread thread = new Thread();
 int priority = thread.getPriority();
 System.out.println("Thread Priority: " + priority);
 ```
+>Note:giving a priority does not means it will get highest priority!! OS has to make sure low priority thread should not be starved!! OS makes sure there is no thread starvation!! example from 5 min only high priority task is coming so lower one will not get chance so to not get this situation ,Os make sure lower priority should too get a chance!!Default priority is 5 !! If two threads has same priority then we get in FIFO order!!
+
+
+example
+
+```java
+
+public class PriorityExample implements Runnable {
+
+    private final String name;
+
+    public PriorityExample(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Runs this operation.
+     */
+    @Override
+    public void run() {
+        for(int i=1;i<=5;i++) {
+            System.out.println(name + " - Count: "+i+", Priority : " + Thread.currentThread().getPriority());
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+}
+
+```
+
+main class
+
+```java
+
+public class ThreadPriorityDemo {
+
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(new PriorityExample("Thread A"));
+        Thread thread2 = new Thread(new PriorityExample("Thread B"));
+        Thread thread3 = new Thread(new PriorityExample("Thread C"));
+
+        thread1.setPriority(Thread.MIN_PRIORITY);
+        thread2.setPriority(Thread.NORM_PRIORITY);
+        thread3.setPriority(Thread.MAX_PRIORITY);
+
+        thread1.start();
+        thread2.start();
+        thread3.start();
+    }
+
+}
+
+
+```
+
+output
+
+```
+Thread C - Count: 1, Priority : 10
+Thread B - Count: 1, Priority : 5
+Thread A - Count: 1, Priority : 1
+Thread B - Count: 2, Priority : 5
+Thread C - Count: 2, Priority : 10
+Thread A - Count: 2, Priority : 1
+Thread C - Count: 3, Priority : 10
+Thread B - Count: 3, Priority : 5
+Thread A - Count: 3, Priority : 1
+Thread C - Count: 4, Priority : 10
+Thread B - Count: 4, Priority : 5
+Thread A - Count: 4, Priority : 1
+Thread C - Count: 5, Priority : 10
+Thread B - Count: 5, Priority : 5
+Thread A - Count: 5, Priority : 1
+```
+
+can see here highest priority thread is not one which is executed first completely!!
+
+another output
+
+```
+Thread A - Count: 1, Priority : 1
+Thread C - Count: 1, Priority : 10
+Thread B - Count: 1, Priority : 5
+Thread C - Count: 2, Priority : 10
+Thread B - Count: 2, Priority : 5
+Thread A - Count: 2, Priority : 1
+Thread C - Count: 3, Priority : 10
+Thread B - Count: 3, Priority : 5
+Thread A - Count: 3, Priority : 1
+Thread C - Count: 4, Priority : 10
+Thread B - Count: 4, Priority : 5
+Thread A - Count: 4, Priority : 1
+Thread C - Count: 5, Priority : 10
+Thread B - Count: 5, Priority : 5
+Thread A - Count: 5, Priority : 1
+```
+
+>Note: dont depend on priority for any logic!!
+
+wait(),notify() and notifyAll()
 ### wait()
 - **Description :**  Causes the current thread to wait until another thread invokes the notify() method or the notifyAll() method for this object.
 - **Syntax :** public final void wait() throws InterruptedException
@@ -461,6 +769,9 @@ synchronized (sharedObject) {
     sharedObject.notifyAll(); // Notify all waiting threads
 }
 ```
+
+
+
 
 ### Race Condition:
 A race condition occurs in concurrent programming when the outcome of a program depends on the relative timing or interleaving of multiple threads or processes. It happens when two or more threads or processes attempt to modify shared data at the same time. The result of the program becomes unpredictable and may lead to erroneous behavior.
