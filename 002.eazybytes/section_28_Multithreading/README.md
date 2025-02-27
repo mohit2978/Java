@@ -741,6 +741,13 @@ Thread A - Count: 5, Priority : 1
 >Note: dont depend on priority for any logic!!
 
 wait(),notify() and notifyAll()
+
+Producer Consumer Problem
+
+Producer wait till Consumer consumes ,after consumer consumes it notify() producer 
+
+vice versa also true Consumer wait till Producer produces mafter producer produces ,it notify() consumer !!
+
 ### wait()
 - **Description :**  Causes the current thread to wait until another thread invokes the notify() method or the notifyAll() method for this object.
 - **Syntax :** public final void wait() throws InterruptedException
@@ -769,9 +776,135 @@ synchronized (sharedObject) {
     sharedObject.notifyAll(); // Notify all waiting threads
 }
 ```
+## Producer Consumer problem
+
+```java
+
+public class SharedResource {
+
+    private int data;
+    private boolean isEmpty = true;
+
+    // Producer method
+    synchronized void produce(int value) {
+        while (!isEmpty) {//isEmpty tells buffer is full or not!!
+            try {
+                // Buffer is not empty, wait for the consumer to consume
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Produce an item
+        data = value;
+        isEmpty = false;
+        System.out.println("Produced: " + value);
+
+        // Notify the waiting consumer
+        notify();
+    }
+
+    // Consumer method
+    synchronized int consume() {
+        while (isEmpty) {
+            try {
+                // Buffer is empty, wait for the producer to produce
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        // Consume the item
+        int consumedData = data;
+        isEmpty = true;
+        System.out.println("Consumed: " + consumedData);
+
+        // Notify the waiting producer
+        notify();
+
+        return consumedData;
+    }
 
 
+}
 
+
+```
+synchronized put monitor lock on Class, so only one thread can be inside the producer or consumer
+
+```java
+
+public class ProducerConsumerExample {
+
+    public static void main(String[] args) {
+        SharedResource sharedResource = new SharedResource();
+
+        Thread producerThread = new Thread(
+                () -> {
+                    for(int i = 1; i<=10; i++){
+                        sharedResource.produce(i);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+        );
+        producerThread.start();
+
+        Thread consumerThread = new Thread(
+                () -> {
+                    for(int i = 1; i<=10; i++){
+                        sharedResource.consume();
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+        );
+        consumerThread.start();
+    }
+
+}
+
+```
+output
+
+```
+Produced: 1
+Consumed: 1
+Produced: 2
+Consumed: 2
+Produced: 3
+Consumed: 3
+Produced: 4
+Consumed: 4
+Produced: 5
+Consumed: 5
+Produced: 6
+Consumed: 6
+Produced: 7
+Consumed: 7
+Produced: 8
+Consumed: 8
+Produced: 9
+Consumed: 9
+Produced: 10
+Consumed: 10
+
+```
+
+Thread.sleep() here is used to get the output slowly else whole output will be shown at once!!
+
+
+Here we have only used only one thread but in real project we have multiple threads so here we have put synchronized on produce() and consume() methods!!
+
+
+for wait() we can even pass time in ms if until this time in ms we do not call notify() ,it will wakeup automatically!!
 
 ### Race Condition:
 A race condition occurs in concurrent programming when the outcome of a program depends on the relative timing or interleaving of multiple threads or processes. It happens when two or more threads or processes attempt to modify shared data at the same time. The result of the program becomes unpredictable and may lead to erroneous behavior.
@@ -810,6 +943,127 @@ System.out.println("Counter: " + counter);
 ```
 In this example, the expected final value of the counter should be 2000 (1000 increments from Thread A and 1000 increments from Thread B). However, due to the race condition, the actual final value may vary, and the program may produce unexpected results.
 
+Since both threads can execute these steps simultaneously, they may overwrite each other’s changes, leading to unexpected results (i.e., counter may not be 2000).
+
+we can put synchronized method or can use AtomicInteger ensures that only one thread can modify counter at a time.
+
+```java
+
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        AtomicInteger counter = new AtomicInteger(0);
+
+        Thread threadA = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.incrementAndGet(); // Atomic operation
+            }
+        });
+
+        Thread threadB = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.incrementAndGet(); // Atomic operation
+            }
+        });
+
+        threadA.start();
+        threadB.start();
+
+        threadA.join();
+        threadB.join();
+
+        System.out.println("Final counter value: " + counter.get());
+    }
+}
+```
+AtomicInteger provides atomic operations like incrementAndGet(), ensuring thread safety without locks.
+
+
+let us see unsynchronized counter
+
+```java
+public class Counter {
+
+    private int count = 0;
+
+    public void incrementUnSynchronized (){
+        count++;
+    }
+
+    public  synchronized void incrementSynchronized (){
+        count++;
+        /*synchronized (Counter.class){
+            count++;
+        }*/
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+
+```
+
+main class
+
+```java
+
+public class UnSynchronizationExample {
+
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        Runnable unSynchronizedTask = () -> {
+            for(int i=0;i<1000;i++) {
+                counter.incrementUnSynchronized();
+            }
+        };
+
+        Thread thread1 = new Thread(unSynchronizedTask);
+        Thread thread2 = new Thread(unSynchronizedTask);
+
+        thread1.start();
+        thread2.start();
+
+        thread1.join();
+        thread2.join();
+
+        System.out.println("UnSynchronized Count value : " + counter.getCount());
+    }
+
+}
+
+```
+
+Each time it produces different output!!
+
+Synchronized one 
+
+```java
+
+public class SynchronizationExample {
+
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        Runnable synchronizedTask = () -> {
+            for(int i=0;i<1000;i++) {
+                counter.incrementSynchronized();
+            }
+        };
+
+        Thread thread1 = new Thread(synchronizedTask);
+        Thread thread2 = new Thread(synchronizedTask);
+
+        thread1.start();
+        thread2.start();
+
+        thread1.join();
+        thread2.join();
+
+        System.out.println("Synchronized Count value : " + counter.getCount());
+    }
+
+}
+
+```
 ### Synchronization Keywords:
 Java provides synchronization mechanisms to prevent race conditions and ensure thread-safe access to shared resources. Two main synchronization keywords are used: synchronized keyword and volatile keyword.
 

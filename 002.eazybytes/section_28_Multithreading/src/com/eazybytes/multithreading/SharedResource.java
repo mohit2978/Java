@@ -7,7 +7,7 @@ public class SharedResource {
 
     // Producer method
     synchronized void produce(int value) {
-        while (!isEmpty) {
+        while (!isEmpty) {//isEmpty tells buffer is full or not!!
             try {
                 // Buffer is not empty, wait for the consumer to consume
                 wait();
