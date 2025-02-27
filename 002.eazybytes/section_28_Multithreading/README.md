@@ -1,5 +1,11 @@
-# Multithreading in Java 
+# Multithreading in Java
+## Parallel vs concurrent execution
+
+In parallel execution we have multiple processors and on each processor single thread running but concurrent is on single processor multiple thread running
+
 Multithreading in Java refers to the ability of a Java program to execute multiple threads concurrently. A thread in Java represents an independent path of execution within a program. Multithreading allows a program to perform multiple tasks simultaneously, enhancing performance and responsiveness.
+
+By default we have only Main thread!!
 
 In Java, multithreading is achieved primarily by using two mechanisms:
 
@@ -32,6 +38,146 @@ Multithreading allows different parts of a program to execute simultaneously, th
 
 ## How Multiple Threads Improve Performance 
 In Java programming, threading allows you to execute multiple tasks concurrently, thus improving performance by leveraging the computational resources more effectively. This README provides an overview of how multiple threads improve performance in Java.
+
+## Info
+
+Runnable is a functional interface having run method in it!!
+so we provide this run() method implentaipm in thread!!
+
+```java
+@FunctionalInterface
+public interface Runnable {
+    /**
+     * Runs this operation.
+     */
+    void run();
+}
+
+```
+Thread class have a contructor that accepts Runnable Inteface!! and we know lambda is way to implement functional interface so we pass that to constructor!!
+
+
+## Example
+
+```java
+
+public class ThreadDemo {
+
+    public static void main(String[] args) {
+        //way1-->it will not do anything default thread constructor is created
+        Thread thread = new Thread();
+        thread.start();//start tells to run thread ,when start is called,this thread will get CPU time,we get to call start() only once 
+        //JVM schedules this thread independently from current thread that is Main Thread 
+
+        // way2--> to get execute something
+        Thread thread1 = new Thread(() -> System.out.println("Hello from Java Thread"));
+        thread1.start();
+
+        //way3--> similar to way2
+        Runnable runnable = () -> System.out.println("Hi from Java Thread");
+        Thread thread2 = new Thread(runnable);
+        thread2.start();
+        //way4--> HelloThread is extending Thread,Thread implements Runnable so need to override run() 
+        HelloThread thread3 = new HelloThread();
+        thread3.start();
+        //way5-->HelloThrea1 Implements Runnable,just like way 2 and 3 so we create run () in there and from Start() JVM calls run() of that 
+        Thread thread4 = new Thread(new HelloThread1());
+        thread4.start();
+        //way 6-->Since you're passing Hello::sayHello, which is a method reference, Java automatically converts it into a Runnable using functional interface mechanics.
+
+        //Runnable r = () -> Hello.sayHello();
+        Thread thread5 = new Thread(Hello::sayHello);
+        thread5.start();
+
+
+        System.out.println("Hello from Main Thread");
+    }
+
+
+```
+
+HelloThread
+
+```java
+public class HelloThread extends Thread {
+
+    @Override
+    public void run () {
+        System.out.println("Hello from HelloThread class " +
+                " which extends Thread");
+    }
+
+}
+
+```
+
+HelloThread1
+
+```java
+public class HelloThread1 implements Runnable {
+
+    @Override
+    public void run () {
+        System.out.println("Hello from HelloThread1 class " +
+                " which implements Runnable");
+    }
+
+}
+
+```
+
+Hello Class
+
+```java
+public class Hello {
+
+    public static void sayHello() {
+
+        System.out.println("Hello from Method Reference approach");
+    }
+
+}
+
+```
+
+Output
+
+```text
+Hello from Java Thread
+Hi from Java Thread
+Hello from HelloThread class  which extends Thread
+Hello from HelloThread1 class  which implements Runnable
+Hello from Main Thread
+Hello from Method Reference approach
+```
+
+```text
+Hi from Java Thread
+Hello from HelloThread class  which extends Thread
+Hello from HelloThread1 class  which implements Runnable
+Hello from Java Thread
+Hello from Main Thread
+Hello from Method Reference approach
+```
+ >Note:See threads do not have specific order to run they can run anyway
+
+ In Java, when you call the start() method on a Thread object, it internally calls the run() method of the Thread class. Here’s how it works step by step:
+
+
+1. Calling start()
+
+    When you call thread.start();, the JVM creates a new thread and schedules it for execution.
+2. JVM Calls run()
+Internally, the start() method of Thread does not call run() directly. Instead, it tells the JVM to create a new OS-level thread.
+
+    Once the new thread is scheduled by the JVM, it automatically calls the run() method.
+
+3. Default run() Behavior
+If the Thread class’s run() method is not overridden, it does nothing.
+However, when you pass a Runnable (like Hello::sayHello in example) to the Thread constructor, the run() method is overridden to execute the Runnable’s run() method.
+
+>Note:If you directly run run() method , you see it all run in sequential manner ,start() schedules Thread with JVM , so we always use start() method!! so to get multithreading benefits we use start() method only!!
+
 
 ### Benefits of Multithreading
 - **1. Concurrency :**
