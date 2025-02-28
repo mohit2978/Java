@@ -1147,6 +1147,23 @@ Without the `volatile` keyword, the `readerThread` might cache the value of the 
 
 This demonstrates how the volatile keyword ensures visibility of changes across threads without providing atomicity.
 
+>Note:Volatile does not guarntee atomicity!!so use it with boolean values only
+
+for counter don't use volatile,So, volatile is useful for flags, configuration settings, and single writes, but for incrementing counters, complex logic, or ensuring atomicity, use synchronized or Atomic classes.
+
+instead use AtomicInteger
+```java
+
+class Counter {
+    AtomicInteger count = new AtomicInteger(0);
+
+    void increment() {
+        count.incrementAndGet();  // Atomic operation
+    }
+}
+```
+
+
 ## Demo of Synchronized methods and blocks
 ```java
 public class SynchronizationDemo {
@@ -1333,6 +1350,8 @@ We have two threads, thread1 and thread2, each trying to acquire two resources r
 Both threads acquire one resource and then wait for the other resource to be released, creating a potential deadlock scenario.
 Now, let's explore some possible fixes for the deadlock:
 
+The above program will lead to deadlock in some case when you run not everytime!!
+
 ### Resource Ordering:
 Ensure that threads acquire resources in a consistent global order to prevent circular waits. In this case, we can make both threads acquire resources in the same order:
 ```java
@@ -1427,3 +1446,33 @@ We then use `join()` to wait for the virtual thread to complete before printing 
 Remember that in order to run this code, you need to have Java 17 or later installed on your system, as virtual threads are a feature introduced in Java 17.
 
 Please note that this is a conceptual demonstration, and you may need to adapt the code based on your specific requirements and the version of Java you are using. Additionally, virtual threads are designed to integrate seamlessly with existing Java concurrency APIs, so you can also explore their usage with classes like `CompletableFuture` and `ExecutorService`.
+
+
+```java
+public class VirtualThreadDemo {
+
+    public static void main(String[] args) throws InterruptedException {
+        long startTime = System.currentTimeMillis();
+        Random random = new Random();
+        Runnable runnable = () -> {
+           double result = random.nextDouble(1000) * random.nextDouble(1000);
+            System.out.println(result);
+        };
+        for (int i =0; i<500000; i++) {
+                 Thread.ofVirtual().start(runnable).join(); //8828
+                 // Thread.startVirtualThread(runnable).join(); // 8844
+                // Thread thread = new Thread(runnable); // 30563
+                // thread.start();
+                // thread.join();
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total time : " + (endTime-startTime));
+    }
+
+}
+
+```
+
+If you use simple thread, you get 5 lakh threads!! but it take a lot
+of time!! but if you use virtual threads you will be able to get 5 lakh thread 
+in very less time!!
