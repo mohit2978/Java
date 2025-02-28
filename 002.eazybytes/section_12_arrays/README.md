@@ -221,6 +221,21 @@ public class Main {
 }
 
 ```
+
+Since Arrays.sort() does not support custom comparators for int[] in case you want to sort in desecding order, you can,Use Integer[] instead.
+Or, sort the array normally (ascending) and then reverse it!!
+
+
+sort in desending order
+
+```java
+        Integer[] arr={5, 2,8,1,6};
+        Arrays.sort(arr, (a, b) -> b-a); // Sorting in descending order
+        System.out.println(Arrays.toString(arr));
+```
+
+If very large array use parallel sort() it will run many parallel sorting on many cores of your CPU !!
+
 ## Arrays.fill()
 The `Arrays.fill()` method from the `java.util` package fills the specified array with the specified value.
 #### Example

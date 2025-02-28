@@ -10,6 +10,9 @@ public class SortDemo {
         Arrays.sort(smallArray);
         System.out.println(Arrays.toString(smallArray));
 
+        Integer[] arr={5, 2,8,1,6};
+        Arrays.sort(arr, (a, b) -> b-a); // Sorting in descending order
+        System.out.println(Arrays.toString(arr));
         int[] largerArray = new int[10000];
         Random random = new Random();
 
